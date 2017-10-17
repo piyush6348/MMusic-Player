@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -35,7 +36,8 @@ public class MASongsListAdapter extends RecyclerView.Adapter<MASongsListAdapter.
 
     @Override
     public void onBindViewHolder(MASongsListHolder holder, int position) {
-        holder.rvLiSongTitle.setText(songArrayList.get(position).getTitle());
+        holder.vhTvSongTitle.setText(songArrayList.get(position).getTitle());
+        holder.vhTvSongSinger.setText(songArrayList.get(position).getArtist());
     }
 
     @Override
@@ -44,11 +46,13 @@ public class MASongsListAdapter extends RecyclerView.Adapter<MASongsListAdapter.
     }
 
      class MASongsListHolder extends RecyclerView.ViewHolder{
-        public TextView rvLiSongTitle;
-
+        public TextView vhTvSongTitle,vhTvSongSinger;
+        public ImageView vhIvSongImage;
         public MASongsListHolder(View itemView) {
             super(itemView);
-            rvLiSongTitle = (TextView) itemView.findViewById(R.id.rv_li_song_name);
+            vhTvSongTitle = (TextView) itemView.findViewById(R.id.vh_tv_song_title);
+            vhTvSongSinger = (TextView) itemView.findViewById(R.id.vh_tv_song_singer);
+            vhIvSongImage = (ImageView) itemView.findViewById(R.id.vh_iv_song_image);
         }
     }
 }

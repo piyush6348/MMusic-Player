@@ -24,10 +24,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initializeView();
+        setUpAdapter(getSongsList(this),this);
+
+    }
+
+    private void setUpAdapter(ArrayList<Song> songsList, Context context) {
         MASongsListAdapter maSongsListAdapter = new MASongsListAdapter(
-                getSongsList(this),this
+                songsList,context
         );
-        rvSongs.setLayoutManager(new LinearLayoutManager(this));
+        rvSongs.setLayoutManager(new LinearLayoutManager(context));
         rvSongs.setAdapter(maSongsListAdapter);
     }
 
