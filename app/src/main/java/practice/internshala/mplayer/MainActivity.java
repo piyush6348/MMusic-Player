@@ -13,8 +13,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.MediaController;
 
 import java.util.ArrayList;
 
@@ -22,12 +25,15 @@ import practice.internshala.mplayer.adapter.MASongsListAdapter;
 import practice.internshala.mplayer.models.Song;
 import practice.internshala.mplayer.service.MusicService;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MediaController.MediaPlayerControl{
 
     private RecyclerView rvSongs;
     private MusicService musicSrv;
     private Intent playIntent;
     private boolean musicBound=false;
+    private MusicController musicController;
+    private boolean paused=false, playbackPaused=false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         initializeView();
         setUpAdapter(getSongsList(this),this);
-
+        setMusicController();
     }
 
     //connect to the service
@@ -67,9 +73,36 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume(){
+        super.onResume();
+        if(paused){
+            setMusicController();
+            paused=false;
+        }
+    }
+
+    @Override
+    protected void onPause(){
+        playbackPaused=true;
+        musicSrv.pausePlayer();
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        musicController.hide();
+        super.onStop();
+    }
+
     public void songPicked(View view){
         musicSrv.setSong(Integer.parseInt(view.getTag().toString()));
         musicSrv.playSong();
+        if(playbackPaused){
+            setMusicController();
+            playbackPaused=false;
+        }
+        musicController.show(0);
     }
 
     private void setUpAdapter(ArrayList<Song> songsList, Context context) {
@@ -78,6 +111,46 @@ public class MainActivity extends AppCompatActivity {
         );
         rvSongs.setLayoutManager(new LinearLayoutManager(context));
         rvSongs.setAdapter(maSongsListAdapter);
+    }
+
+    private void setMusicController(){
+        musicController = new MusicController(this);
+        musicController.setPrevNextListeners(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // on click next
+                playNextSong();
+            }
+        }, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               // on click prev
+                playPrevSong();
+            }
+        });
+
+        musicController.setMediaPlayer(this);
+        musicController.setAnchorView(findViewById(R.id.rv_songs));
+        musicController.setEnabled(true);
+        //musicController.show();
+    }
+
+    private void playNextSong() {
+        musicSrv.playNext();
+        if(playbackPaused){
+            setMusicController();
+            playbackPaused=false;
+        }
+        musicController.show(0);
+    }
+
+    private void playPrevSong() {
+        musicSrv.playPrev();
+        if(playbackPaused){
+            setMusicController();
+            playbackPaused=false;
+        }
+        musicController.show(0);
     }
 
     private void initializeView() {
@@ -126,11 +199,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.main,menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //menu item selected
         switch (item.getItemId()) {
             case R.id.action_shuffle:
                 //shuffle
+                musicSrv.setShuffle();
                 break;
             case R.id.action_end:
                 stopService(playIntent);
@@ -146,5 +227,66 @@ public class MainActivity extends AppCompatActivity {
         stopService(playIntent);
         musicSrv=null;
         super.onDestroy();
+    }
+
+    @Override
+    public void start() {
+        musicSrv.go();
+    }
+
+    @Override
+    public void pause() {
+        musicSrv.pausePlayer();
+    }
+
+    @Override
+    public int getDuration() {
+        if(musicSrv!=null && musicBound && musicSrv.isPng())
+            return musicSrv.getDur();
+        return 0;
+    }
+
+    @Override
+    public int getCurrentPosition() {
+        if(musicSrv!=null && musicBound && musicSrv.isPng())
+            return musicSrv.getPosn();
+        return 0;
+    }
+
+    @Override
+    public void seekTo(int pos) {
+        musicSrv.seek(pos);
+    }
+
+    @Override
+    public boolean isPlaying() {
+        if(musicSrv!=null && musicBound)
+            return musicSrv.isPng();
+        return false;
+    }
+
+    @Override
+    public int getBufferPercentage() {
+        return 0;
+    }
+
+    @Override
+    public boolean canPause() {
+        return true;
+    }
+
+    @Override
+    public boolean canSeekBackward() {
+        return true;
+    }
+
+    @Override
+    public boolean canSeekForward() {
+        return true;
+    }
+
+    @Override
+    public int getAudioSessionId() {
+        return 0;
     }
 }
