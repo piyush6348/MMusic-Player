@@ -84,8 +84,9 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
 
     @Override
     protected void onPause(){
+        /*
         playbackPaused=true;
-        musicSrv.pausePlayer();
+        musicSrv.pausePlayer();*/
         super.onPause();
     }
 
@@ -114,7 +115,17 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
     }
 
     private void setMusicController(){
-        musicController = new MusicController(this);
+        if(musicController == null){
+            musicController = new MusicController(this){
+                @Override
+                public void show(int timeout) {
+                    if(timeout == 3000)
+                        timeout = Integer.MAX_VALUE;
+                    super.show(timeout);
+                }
+            };
+        }
+
         musicController.setPrevNextListeners(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

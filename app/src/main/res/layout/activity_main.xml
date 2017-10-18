@@ -3,6 +3,7 @@
     android:orientation="vertical"
     android:layout_height="match_parent">
 
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_songs"
         android:layout_width="match_parent"
