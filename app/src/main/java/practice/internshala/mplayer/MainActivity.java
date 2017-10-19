@@ -9,30 +9,44 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.IBinder;
 import android.provider.MediaStore;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.MediaController;
+
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.util.ArrayList;
 
 import practice.internshala.mplayer.adapter.MASongsListAdapter;
+import practice.internshala.mplayer.fragments.MainFragment;
 import practice.internshala.mplayer.models.Song;
 import practice.internshala.mplayer.service.MusicService;
 
 public class MainActivity extends AppCompatActivity implements MediaController.MediaPlayerControl{
 
-    private RecyclerView rvSongs;
     private MusicService musicSrv;
     private Intent playIntent;
     private boolean musicBound=false;
     private MusicController musicController;
     private boolean paused=false, playbackPaused=false;
+    private Toolbar topToolBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +54,40 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
         setContentView(R.layout.activity_main);
 
         initializeView();
-        setUpAdapter(getSongsList(this),this);
+
+        if(musicController==null)
         setMusicController();
+        
+        setUpNavigationDrawer();
+    }
+
+    private void setUpNavigationDrawer() {
+
+        AccountHeader headerResult = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withHeaderBackground(R.mipmap.ic_launcher).build();
+
+        //if you want to update the items at a later time it is recommended to keep it in a variable
+        SecondaryDrawerItem item1 = new SecondaryDrawerItem().withIdentifier(1).withName(R.string.all_songs);
+        SecondaryDrawerItem item2 = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.favourites);
+
+//create the drawer and remember the `Drawer` result object
+        Drawer result = new DrawerBuilder()
+                .withActivity(this)
+                .withToolbar(topToolBar)
+                .withAccountHeader(headerResult)
+                .addDrawerItems(
+                        item1,
+                        item2
+                )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        // do something with the clicked item :D
+                        return true;
+                    }
+                })
+                .build();
     }
 
     //connect to the service
@@ -53,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
             //get service
             musicSrv = binder.getService();
             //pass list
-            musicSrv.setList(getSongsList(musicSrv.getApplicationContext()));
+            musicSrv.setList(MainFragment.getSongsList(musicSrv.getApplicationContext()));
             musicBound = true;
         }
 
@@ -66,7 +112,9 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
     @Override
     protected void onStart() {
         super.onStart();
-        if(playIntent==null){
+
+        if(musicSrv!=null && musicSrv.isPng());
+        else if(playIntent==null){
             playIntent = new Intent(this, MusicService.class);
             bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
             startService(playIntent);
@@ -106,13 +154,6 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
         musicController.show(0);
     }
 
-    private void setUpAdapter(ArrayList<Song> songsList, Context context) {
-        MASongsListAdapter maSongsListAdapter = new MASongsListAdapter(
-                songsList,context,MainActivity.this
-        );
-        rvSongs.setLayoutManager(new LinearLayoutManager(context));
-        rvSongs.setAdapter(maSongsListAdapter);
-    }
 
     private void setMusicController(){
         if(musicController == null){
@@ -141,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
         });
 
         musicController.setMediaPlayer(this);
-        musicController.setAnchorView(findViewById(R.id.rv_songs));
+        musicController.setAnchorView(findViewById(R.id.fl_container));
         musicController.setEnabled(true);
         //musicController.show();
     }
@@ -165,49 +206,15 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
     }
 
     private void initializeView() {
-        rvSongs = (RecyclerView) findViewById(R.id.rv_songs);
+        topToolBar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(topToolBar);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.fl_container,new MainFragment());
+        fragmentTransaction.commit();
     }
 
-    public static ArrayList<Song> getSongsList(Context context){
-
-        ArrayList<Song> songArrayList = new ArrayList<>();
-
-        ContentResolver cr = context.getContentResolver();
-
-        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        String selection = MediaStore.Audio.Media.IS_MUSIC + "!= 0";
-        String sortOrder = MediaStore.Audio.Media.TITLE + " ASC";
-        Cursor cur = cr.query(uri, null, selection, null, sortOrder);
-        int count = 0;
-
-        if(cur != null)
-        {
-            count = cur.getCount();
-
-            if(count > 0)
-            {
-                while(cur.moveToNext())
-                {
-                    String album = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ALBUM));
-                    String artist = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-                    String path = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.DATA));
-                    String duration = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.DURATION));
-                    String title = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.TITLE));
-                    String albumID = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
-                    String id = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media._ID));
-
-                    Song song = new Song(title,album,artist,duration,path,albumID,id);
-                    // Add code to get more column here
-                    songArrayList.add(song);
-                    // Save to your list here
-                }
-
-            }
-        }
-
-        cur.close();
-        return songArrayList;
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
