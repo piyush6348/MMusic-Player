@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -68,8 +69,10 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
                 .withHeaderBackground(R.mipmap.ic_launcher).build();
 
         //if you want to update the items at a later time it is recommended to keep it in a variable
-        SecondaryDrawerItem item1 = new SecondaryDrawerItem().withIdentifier(1).withName(R.string.all_songs);
-        SecondaryDrawerItem item2 = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.favourites);
+        SecondaryDrawerItem item1 = new SecondaryDrawerItem().withIdentifier(1).withName(R.string.all_songs)
+                .withIcon(R.drawable.library_music);
+        SecondaryDrawerItem item2 = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.favourites)
+                .withIcon(R.drawable.music_circle);
 
 //create the drawer and remember the `Drawer` result object
         Drawer result = new DrawerBuilder()
@@ -84,6 +87,13 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         // do something with the clicked item :D
+
+                        if(position==1){
+                            Log.e("onItemClick: ", " All Songs");
+                        }
+                        else if(position==2){
+                            Log.e("onItemClick: ", " Favourites");
+                        }
                         return true;
                     }
                 })
