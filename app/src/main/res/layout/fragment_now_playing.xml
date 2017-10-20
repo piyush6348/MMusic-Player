@@ -45,10 +45,10 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/headerView"
             android:layout_gravity="center_horizontal|center_vertical"
-            android:paddingTop="30dp"
             android:orientation="vertical"
             android:paddingLeft="30dp"
-            android:paddingRight="30dp">
+            android:paddingRight="30dp"
+            android:paddingTop="30dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -56,6 +56,7 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
+                    android:id="@+id/ll_texts"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -63,16 +64,17 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:ems="6"
                         android:id="@+id/song_title"
                         style="@style/TextAppearance.AppCompat.Body1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="130dp"
                         android:ellipsize="end"
                         android:singleLine="true"
                         android:textSize="25sp" />
 
                     <TextView
+                        android:ems="6"
                         android:id="@+id/song_artist"
                         style="@style/TextAppearance.AppCompat.Body1"
                         android:layout_width="wrap_content"
@@ -84,6 +86,20 @@
                         android:textSize="14sp" />
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_toRightOf="@+id/ll_texts">
+
+                    <ImageButton
+                        android:layout_width="35dp"
+                        android:id="@+id/ib_now_playing_favourite"
+                        android:layout_height="35dp"
+                        android:background="@android:color/transparent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_star_border_black_24dp" />
+                </LinearLayout>
             </RelativeLayout>
 
 
@@ -92,7 +108,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone" />
-
 
 
         </LinearLayout>

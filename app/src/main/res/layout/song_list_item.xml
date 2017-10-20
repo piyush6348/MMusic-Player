@@ -1,62 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:id="@+id/vh_ll_song_item"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    >
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/vh_ll_song_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="6dp"
-    android:layout_marginTop="6dp"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
-    <ImageView
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:id="@+id/vh_iv_song_image"
-        android:padding="10dp"
-        android:src="@mipmap/ic_launcher"
-        />
-
-    <LinearLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="12dp"
-        android:layout_marginRight="10dp"
-        android:paddingTop="5dp">
+        android:layout_marginBottom="6dp"
+        android:layout_marginTop="6dp"
+        android:orientation="horizontal">
 
-        <TextView
-            android:layout_weight="1"
-            android:hint="Song Title"
-            android:maxLines="1"
+        <ImageView
+            android:id="@+id/vh_iv_song_image"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:padding="10dp"
+            android:src="@mipmap/ic_launcher" />
 
-            android:ellipsize="end"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:id="@+id/vh_tv_song_title"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:orientation="vertical"
+            android:paddingLeft="12dp"
+            android:paddingTop="5dp">
+
+            <TextView
+                android:id="@+id/vh_tv_song_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:hint="Song Title"
+                android:maxLines="1"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:ems="10"
+                android:id="@+id/vh_tv_song_singer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:hint="Singer's name"
+                android:maxLines="1"
+                android:paddingTop="3dp"
+                android:textSize="13sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:gravity="center"
+            android:layout_height="match_parent">
 
-        <TextView
-            android:layout_weight="1"
-            android:maxLines="1"
-            android:paddingTop="3dp"
-            android:ellipsize="end"
-            android:hint="Singer's name"
-            android:textSize="13sp"
-            android:id="@+id/vh_tv_song_singer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:background="@android:color/transparent"
+                android:scaleType="centerCrop"
+                android:id="@+id/ib_favourite"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_star_border_black_24dp" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+
     <View
         android:layout_width="match_parent"
-        android:background="@color/black"
-        android:layout_height="1dp"/>
+        android:layout_height="1dp"
+        android:background="@color/black" />
 </LinearLayout>

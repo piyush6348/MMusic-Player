@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
                         else if(position==3){
                             Song song = musicSrv.getSong();
                             fragment = NowPlaying.newInstance(song.getAlbumID(),
-                                    song.getAlbum(),song.getTitle());
+                                    song.getAlbum(),song.getTitle(),song.getId());
                         }
 
                         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
     private void updateNowPlayingFragment() {
         Song song = musicSrv.getSong();
         Fragment fragment = NowPlaying.newInstance(song.getAlbumID(),
-                song.getAlbum(),song.getTitle());
+                song.getAlbum(),song.getTitle(),song.getId());
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fl_container, fragment);
@@ -266,7 +266,9 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fl_container);
+        if (fragment instanceof MainFragment)
+            super.onBackPressed();
     }
 
     @Override
