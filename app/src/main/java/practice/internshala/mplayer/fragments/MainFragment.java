@@ -1,6 +1,7 @@
 package practice.internshala.mplayer.fragments;
 
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
@@ -20,6 +21,7 @@ import practice.internshala.mplayer.MainActivity;
 import practice.internshala.mplayer.R;
 import practice.internshala.mplayer.adapter.MASongsListAdapter;
 import practice.internshala.mplayer.models.Song;
+import practice.internshala.mplayer.service.MusicService;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,6 +38,14 @@ public class MainFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private RecyclerView rvSongs;
+
+    private MainActivity mainActivity;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mainActivity = (MainActivity)activity;
+    }
 
     public MainFragment() {
         // Required empty public constructor
@@ -81,11 +91,16 @@ public class MainFragment extends Fragment {
 
 
     private void setUpAdapter(ArrayList<Song> songsList, Context context) {
+
         MASongsListAdapter maSongsListAdapter = new MASongsListAdapter(
                 songsList,context,getActivity()
         );
         rvSongs.setLayoutManager(new LinearLayoutManager(context));
         rvSongs.setAdapter(maSongsListAdapter);
+
+        MusicService musicService =mainActivity.getMusicService();
+        if(musicService!=null)
+            musicService.setList(songsList);
     }
 
     public static ArrayList<Song> getSongsList(Context context){
