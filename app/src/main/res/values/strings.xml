@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">MPlayer</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -6,4 +6,6 @@
     <string name="all_songs">All Songs</string>
     <string name="favourites">Favourites</string>
     <string name="now_playing">Now Playing</string>
+    <string name="durationformatshort" translatable="false"><xliff:g id="format">%2$d:%3$02d</xliff:g></string>
+    <string name="durationformatlong" translatable="false"><xliff:g id="format">%1$d:%2$02d:%3$02d</xliff:g></string>
 </resources>

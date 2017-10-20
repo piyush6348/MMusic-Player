@@ -32,10 +32,10 @@ dependencies {
     compile "com.android.support:percent:$support_lib_version"
     compile "com.android.support:support-core-utils:$support_lib_version"
 
-    compile 'net.steamcrafted:materialiconlib:1.0.3'
     compile('com.mikepenz:materialdrawer:5.9.5@aar') {
         transitive = true
     }
+    compile 'net.steamcrafted:materialiconlib:1.0.3'
     testCompile 'junit:junit:4.12'
 }
 repositories {

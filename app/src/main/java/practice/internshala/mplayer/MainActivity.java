@@ -1,43 +1,32 @@
 package practice.internshala.mplayer;
 
 import android.content.ComponentName;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.IBinder;
-import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.MediaController;
 
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.model.DividerDrawerItem;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
-import java.util.ArrayList;
-
-import practice.internshala.mplayer.activity.NowPlayingActivity;
-import practice.internshala.mplayer.adapter.MASongsListAdapter;
 import practice.internshala.mplayer.fragments.MainFragment;
+import practice.internshala.mplayer.fragments.NowPlaying;
 import practice.internshala.mplayer.models.Song;
 import practice.internshala.mplayer.service.MusicService;
 
@@ -92,16 +81,26 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         // do something with the clicked item :D
 
+                        Fragment fragment = null;
+
                         if(position==1){
                             Log.e("onItemClick: ", " All Songs");
+                            fragment = new MainFragment();
                         }
                         else if(position==2){
                             Log.e("onItemClick: ", " Favourites");
                         }
                         else if(position==3){
-                            Intent intent = new Intent(MainActivity.this, NowPlayingActivity.class);
-                            startActivity(intent);
+                            Song song = musicSrv.getSong();
+                            fragment = NowPlaying.newInstance(song.getAlbumID(),
+                                    song.getAlbum(),song.getTitle());
                         }
+
+                        FragmentManager fragmentManager = getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.fl_container, fragment);
+                        fragmentTransaction.commit();
+
                         return true;
                     }
                 })
