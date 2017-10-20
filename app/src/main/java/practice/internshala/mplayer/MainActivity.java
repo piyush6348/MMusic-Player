@@ -25,6 +25,7 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
+import practice.internshala.mplayer.fragments.FavouritesFragment;
 import practice.internshala.mplayer.fragments.MainFragment;
 import practice.internshala.mplayer.fragments.NowPlaying;
 import practice.internshala.mplayer.models.Song;
@@ -89,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
                         }
                         else if(position==2){
                             Log.e("onItemClick: ", " Favourites");
+                            fragment = new FavouritesFragment();
                         }
                         else if(position==3){
                             Song song = musicSrv.getSong();
@@ -108,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
     }
 
     //connect to the service
-    private ServiceConnection musicConnection = new ServiceConnection(){
+    public ServiceConnection musicConnection = new ServiceConnection(){
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -126,6 +128,9 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
         }
     };
 
+    public ServiceConnection getServiceConnection(){
+        return musicConnection;
+    }
     @Override
     protected void onStart() {
         super.onStart();
@@ -204,6 +209,9 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
         //musicController.show();
     }
 
+    public void setMusicBound(boolean bound){
+        this.musicBound = bound;
+    }
     private void playNextSong() {
         musicSrv.playNext();
         if(playbackPaused){

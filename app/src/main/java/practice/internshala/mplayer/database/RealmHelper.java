@@ -58,4 +58,9 @@ public class RealmHelper {
             return false;
         return true;
     }
+    public static RealmResults<SongDbPOJO> fetchDB(){
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<SongDbPOJO> realmResults = realm.where(SongDbPOJO.class).findAll();
+        return realmResults;
+    }
 }
