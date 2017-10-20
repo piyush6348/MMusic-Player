@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
                         fragmentTransaction.replace(R.id.fl_container, fragment);
                         fragmentTransaction.commit();
 
-                        return true;
+                        return false;
                     }
                 })
                 .build();
@@ -211,6 +211,27 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
             playbackPaused=false;
         }
         musicController.show(0);
+
+        boolean checkPresence = checkPresenceOfNowPlayingFragment();
+        if(checkPresence)
+            updateNowPlayingFragment();
+    }
+
+    private void updateNowPlayingFragment() {
+        Song song = musicSrv.getSong();
+        Fragment fragment = NowPlaying.newInstance(song.getAlbumID(),
+                song.getAlbum(),song.getTitle());
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fl_container, fragment);
+        fragmentTransaction.commit();
+    }
+
+    private boolean checkPresenceOfNowPlayingFragment() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fl_container);
+        if (fragment instanceof NowPlaying)
+            return true;
+        return false;
     }
 
     private void playPrevSong() {
@@ -220,6 +241,9 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
             playbackPaused=false;
         }
         musicController.show(0);
+        boolean checkPresence = checkPresenceOfNowPlayingFragment();
+        if(checkPresence)
+            updateNowPlayingFragment();
     }
 
     private void initializeView() {
@@ -238,6 +262,11 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main,menu);
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     @Override
