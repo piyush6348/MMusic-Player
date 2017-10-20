@@ -167,6 +167,9 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
         playSong();
     }
 
+    public void updateListOfSongs(ArrayList<Song> songArrayList){
+        songs = songArrayList;
+    }
     public int getPosn(){
         return player.getCurrentPosition();
     }

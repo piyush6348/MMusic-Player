@@ -93,6 +93,8 @@ public class FavouritesFragment extends Fragment {
         rvFavouriteSongs = (RecyclerView) rootView.findViewById(R.id.rv_favourite_songs);
 
         ArrayList<Song> songArrayList = getListOfFavouriteSongs();
+
+        mainActivity.getMusicService().setList(songArrayList);
         MASongsListAdapter adapter = new MASongsListAdapter(songArrayList,
                 getActivity(),getActivity());
         rvFavouriteSongs.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -102,25 +104,8 @@ public class FavouritesFragment extends Fragment {
 
 
     }
-/*
-    public ServiceConnection musicConnection = new ServiceConnection(){
 
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            MusicService.MusicBinder binder = (MusicService.MusicBinder)service;
-            //get service
-            musicSrv = binder.getService();
-            //pass list
-            musicSrv.setList(MainFragment.getSongsList(musicSrv.getApplicationContext()));
-            mainActivity.setMusicBound(true);
-        }
 
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mainActivity.setMusicBound(false);
-        }
-    };
-*/
     private ArrayList<Song> getListOfFavouriteSongs() {
         RealmResults<SongDbPOJO> db = RealmHelper.fetchDB();
 
