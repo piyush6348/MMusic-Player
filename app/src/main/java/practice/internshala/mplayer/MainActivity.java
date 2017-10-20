@@ -35,6 +35,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.util.ArrayList;
 
+import practice.internshala.mplayer.activity.NowPlayingActivity;
 import practice.internshala.mplayer.adapter.MASongsListAdapter;
 import practice.internshala.mplayer.fragments.MainFragment;
 import practice.internshala.mplayer.models.Song;
@@ -73,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
                 .withIcon(R.drawable.library_music);
         SecondaryDrawerItem item2 = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.favourites)
                 .withIcon(R.drawable.music_circle);
+        SecondaryDrawerItem item3 = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.now_playing)
+                .withIcon(R.drawable.ic_play_arrow_black_36dp);
 
 //create the drawer and remember the `Drawer` result object
         Drawer result = new DrawerBuilder()
@@ -81,7 +84,8 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
                 .withAccountHeader(headerResult)
                 .addDrawerItems(
                         item1,
-                        item2
+                        item2,
+                        item3
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -93,6 +97,10 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
                         }
                         else if(position==2){
                             Log.e("onItemClick: ", " Favourites");
+                        }
+                        else if(position==3){
+                            Intent intent = new Intent(MainActivity.this, NowPlayingActivity.class);
+                            startActivity(intent);
                         }
                         return true;
                     }

@@ -1,6 +1,8 @@
 <resources>
 
     <!-- Base application theme. -->
+    <attr format="reference" name="iconColor"/>
+
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
