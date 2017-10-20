@@ -9,6 +9,9 @@ import practice.internshala.mplayer.R;
  */
 
 public class Support {
+
+    public static final int SORT_BY_NAME=1;
+    public static final int SORT_BY_DATE_MODIFIED=2;
     public static final String makeShortTimeString(final Context context, long secs) {
         long hours, mins;
 

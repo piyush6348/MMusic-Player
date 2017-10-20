@@ -22,6 +22,7 @@ import practice.internshala.mplayer.R;
 import practice.internshala.mplayer.adapter.MASongsListAdapter;
 import practice.internshala.mplayer.models.Song;
 import practice.internshala.mplayer.service.MusicService;
+import practice.internshala.mplayer.utils.Support;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,8 +36,7 @@ public class MainFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private int mParam1 = 1;
     private RecyclerView rvSongs;
 
     private MainActivity mainActivity;
@@ -60,11 +60,10 @@ public class MainFragment extends Fragment {
      * @return A new instance of fragment MainFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MainFragment newInstance(String param1, String param2) {
+    public static MainFragment newInstance(int param1) {
         MainFragment fragment = new MainFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putInt(ARG_PARAM1, param1);
         fragment.setArguments(args);
         return fragment;
     }
@@ -73,8 +72,7 @@ public class MainFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mParam1 = getArguments().getInt(ARG_PARAM1);
         }
     }
 
@@ -85,7 +83,7 @@ public class MainFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         rvSongs = (RecyclerView) rootView.findViewById(R.id.rv_songs);
-        setUpAdapter(getSongsList(getActivity()),getActivity());
+        setUpAdapter(getSongsList(getActivity(),mParam1),getActivity());
         return rootView;
     }
 
@@ -103,7 +101,7 @@ public class MainFragment extends Fragment {
             musicService.setList(songsList);
     }
 
-    public static ArrayList<Song> getSongsList(Context context){
+    public static ArrayList<Song> getSongsList(Context context,int sortType){
 
         ArrayList<Song> songArrayList = new ArrayList<>();
 
@@ -111,7 +109,13 @@ public class MainFragment extends Fragment {
 
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         String selection = MediaStore.Audio.Media.IS_MUSIC + "!= 0";
-        String sortOrder = MediaStore.Audio.Media.TITLE + " ASC";
+        String sortOrder = "";
+        if(sortType == Support.SORT_BY_NAME)
+            sortOrder = MediaStore.Audio.Media.TITLE + " ASC";
+
+        else if(sortType == Support.SORT_BY_DATE_MODIFIED)
+            sortOrder = MediaStore.Audio.Media.DATE_MODIFIED + " ASC";
+
         Cursor cur = cr.query(uri, null, selection, null, sortOrder);
         int count = 0;
 

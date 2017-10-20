@@ -14,4 +14,14 @@
         android:showAsAction="always"
         android:title="End"/>
 
+
+    <group android:id="@+id/group"
+        android:orderInCategory="3"
+        android:checkableBehavior="single">
+        <item android:id="@+id/menu_sort_by_name"
+            android:title="@string/action_sort_by_name"/>
+        <item android:id="@+id/menu_sort_by_last_edit"
+            android:title="@string/action_sort_by_last_edit"/>
+    </group>
+
 </menu>

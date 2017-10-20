@@ -25,11 +25,14 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
+import java.util.ArrayList;
+
 import practice.internshala.mplayer.fragments.FavouritesFragment;
 import practice.internshala.mplayer.fragments.MainFragment;
 import practice.internshala.mplayer.fragments.NowPlaying;
 import practice.internshala.mplayer.models.Song;
 import practice.internshala.mplayer.service.MusicService;
+import practice.internshala.mplayer.utils.Support;
 
 public class MainActivity extends AppCompatActivity implements MediaController.MediaPlayerControl{
 
@@ -121,7 +124,8 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
             //get service
             musicSrv = binder.getService();
             //pass list
-            musicSrv.setList(MainFragment.getSongsList(musicSrv.getApplicationContext()));
+            musicSrv.setList(MainFragment.getSongsList(musicSrv.getApplicationContext(),
+                    Support.SORT_BY_NAME));
             musicBound = true;
         }
 
@@ -295,8 +299,26 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
                 musicSrv=null;
                 System.exit(0);
                 break;
+
+            case R.id.menu_sort_by_name:
+                makeNewMainFragment(Support.SORT_BY_NAME);
+                break;
+            case R.id.menu_sort_by_last_edit:
+                makeNewMainFragment(Support.SORT_BY_DATE_MODIFIED);
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void makeNewMainFragment(int sortBy) {
+        Fragment fragment = MainFragment.newInstance(sortBy);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fl_container, fragment);
+        fragmentTransaction.commit();
+
+        ArrayList<Song> arr = MainFragment.getSongsList(this,sortBy);
+        musicSrv.setList(arr);
     }
 
     @Override

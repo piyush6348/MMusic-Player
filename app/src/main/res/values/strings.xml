@@ -8,4 +8,6 @@
     <string name="now_playing">Now Playing</string>
     <string name="durationformatshort" translatable="false"><xliff:g id="format">%2$d:%3$02d</xliff:g></string>
     <string name="durationformatlong" translatable="false"><xliff:g id="format">%1$d:%2$02d:%3$02d</xliff:g></string>
+    <string name="action_sort_by_name">Sort By Name</string>
+    <string name="action_sort_by_last_edit">Sort By Last Modified</string>
 </resources>
