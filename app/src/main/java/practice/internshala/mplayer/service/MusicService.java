@@ -28,6 +28,7 @@ import practice.internshala.mplayer.models.Song;
 public class MusicService extends Service implements MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener,
                 MediaPlayer.OnErrorListener{
 
+    private Song currentlyPlayingSong;
     private MediaPlayer player;
     //song list
     private ArrayList<Song> songs;
@@ -123,6 +124,7 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
     public void playSong(){
         player.reset();
         Song song = songs.get(songPosn);
+        currentlyPlayingSong = song;
         long currentSong = Long.parseLong(song.getId());
         songTitle = song.getTitle();
 
@@ -143,7 +145,8 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
         songPosn=songIndex;
     }
     public Song getSong(){
-        return songs.get(songPosn);
+        //return songs.get(songPosn);
+        return currentlyPlayingSong;
     }
 
     public void playPrev(){

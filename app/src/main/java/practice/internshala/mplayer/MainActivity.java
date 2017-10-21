@@ -279,12 +279,7 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
         return true;
     }
 
-    @Override
-    public void onBackPressed() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fl_container);
-        if (fragment instanceof MainFragment)
-            super.onBackPressed();
-    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
