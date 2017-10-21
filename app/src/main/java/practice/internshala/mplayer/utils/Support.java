@@ -12,7 +12,7 @@ public class Support {
 
     public static final int SORT_BY_NAME=1;
     public static final int SORT_BY_DATE_MODIFIED=2;
-    public static final int SPLASH_DISPLAY_LENGTH = 5000;
+    public static final int SPLASH_DISPLAY_LENGTH = 2000;
     public static final String makeShortTimeString(final Context context, long secs) {
         long hours, mins;
 

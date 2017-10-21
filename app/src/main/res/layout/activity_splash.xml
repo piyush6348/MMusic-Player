@@ -4,12 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient"
     tools:context="practice.internshala.mplayer.activity.SplashActivity">
 
     <ImageView
         android:layout_width="100dp"
         android:layout_gravity="center"
-        android:background="@mipmap/ic_launcher"
+        android:src="@mipmap/ic_launcher"
         android:layout_height="100dp" />
 
 </FrameLayout>

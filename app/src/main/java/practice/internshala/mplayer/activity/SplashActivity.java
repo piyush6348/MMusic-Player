@@ -65,6 +65,11 @@ public class SplashActivity extends AppCompatActivity {
                 // result of the request.
             }
         }
+        else {
+            Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
+            startActivity(mainIntent);
+            finish();
+        }
     }
 
     @Override
