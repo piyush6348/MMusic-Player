@@ -249,6 +249,11 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
         return false;
     }
 
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
+
     private void playPrevSong() {
         musicSrv.playPrev();
         if(playbackPaused){
@@ -318,6 +323,7 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
 
     @Override
     protected void onDestroy() {
+
         stopService(playIntent);
         musicSrv=null;
         super.onDestroy();
