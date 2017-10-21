@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
     protected void onStart() {
         super.onStart();
 
-        if(musicSrv!=null && musicSrv.isPng());
+        if(musicSrv!=null && musicSrv.isPng()) ;
         else if(playIntent==null){
             playIntent = new Intent(this, MusicService.class);
             bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);

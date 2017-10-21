@@ -37,6 +37,7 @@ dependencies {
         transitive = true
     }
     compile 'net.steamcrafted:materialiconlib:1.0.3'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
 }
 repositories {
