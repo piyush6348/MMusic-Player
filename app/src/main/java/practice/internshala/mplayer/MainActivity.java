@@ -59,6 +59,8 @@ public class MainActivity extends AppCompatActivity implements MediaController.M
     public MusicService getMusicService(){
         return musicSrv;
     }
+
+
     private void setUpNavigationDrawer() {
 
         AccountHeader headerResult = new AccountHeaderBuilder()
